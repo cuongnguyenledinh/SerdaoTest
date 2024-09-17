@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, Text, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native';
 import { BeneficiaryProps } from '../zustand/beneficiarySlice';
 import { useBoundStore } from '../zustand';
 
@@ -8,6 +16,10 @@ const ListBeneficiaryScreen = ({ navigation }: any) => {
 
   const handleAddNewBeneficiary = () => {
     navigation.navigate('AddNewBeneficiary');
+  };
+
+  const handleContinueTransaction = () => {
+    navigation.navigate('AddTransaction');
   };
 
   const renderItem = ({ item }: { item: BeneficiaryProps }) => {
@@ -25,13 +37,19 @@ const ListBeneficiaryScreen = ({ navigation }: any) => {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    <View style={styles.container}>
+      <Button title='Continue transaction' onPress={handleContinueTransaction} />
       <Button title='Add new beneficiary' onPress={handleAddNewBeneficiary} />
+
+      {listBeneficiary.length > 0 ? <Text style={styles.title}>Saved Beneficiaries:</Text> : null}
       <FlatList
         data={listBeneficiary}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         contentContainerStyle={styles.listContainer}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        updateCellsBatchingPeriod={200}
       />
     </View>
   );
@@ -44,22 +62,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingTop: 20,
   },
-  balanceText: {
+  title: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginTop: 12,
+    marginLeft: 16,
+    alignSelf: 'flex-start',
   },
   item: {
     backgroundColor: '#f9f9f9',
-    padding: 20,
+    padding: 16,
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#ddd',
+    width: Dimensions.get('window').width - 32,
   },
   itemText: {
     fontSize: 16,
+    marginBottom: 6,
   },
   listContainer: {
     flexGrow: 1,

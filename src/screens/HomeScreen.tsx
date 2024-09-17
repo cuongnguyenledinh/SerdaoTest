@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, Text, Button, FlatList, StyleSheet } from 'react-native';
+import { View, Text, Button, FlatList, StyleSheet, Dimensions } from 'react-native';
 import { useBoundStore } from '../zustand';
 import { TransactionProps } from '../zustand/transactionSlice';
 
 const HomeScreen = ({ navigation }: any) => {
   const { listTransaction, balance } = useBoundStore();
+
+  const handleAddTransaction = () => navigation.navigate('ListBeneficiary');
 
   const renderItem = ({ item }: { item: TransactionProps }) => (
     <View style={styles.item}>
@@ -22,12 +24,18 @@ const HomeScreen = ({ navigation }: any) => {
   return (
     <View style={styles.container}>
       <Text style={styles.balanceText}>Current Balance: ${balance.toFixed(2)}</Text>
-      <Button title='Add Transaction' onPress={() => navigation.navigate('ListBeneficiary')} />
+
+      <Button title='Add Transaction' onPress={handleAddTransaction} />
+
+      {listTransaction.length > 0 ? <Text style={styles.title}>Transaction history:</Text> : null}
       <FlatList
         data={listTransaction}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
         contentContainerStyle={styles.listContainer}
+        initialNumToRender={10}
+        maxToRenderPerBatch={10}
+        updateCellsBatchingPeriod={200}
       />
     </View>
   );
@@ -45,17 +53,26 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 12,
+    marginLeft: 16,
+    alignSelf: 'flex-start',
+  },
   item: {
     backgroundColor: '#f9f9f9',
-    padding: 20,
+    padding: 16,
     marginVertical: 8,
     marginHorizontal: 16,
     borderRadius: 5,
     borderWidth: 1,
     borderColor: '#ddd',
+    width: Dimensions.get('window').width - 32,
   },
   itemText: {
     fontSize: 16,
+    marginBottom: 6,
   },
   listContainer: {
     flexGrow: 1,

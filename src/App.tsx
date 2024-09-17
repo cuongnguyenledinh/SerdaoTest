@@ -16,12 +16,23 @@ const App = () => {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name='Home' component={HomeScreen} />
-          <Stack.Screen name='AddTransaction' component={AddTransactionScreen} />
-          <Stack.Screen name='ListBeneficiary' component={ListBeneficiaryScreen} />
+          <Stack.Screen
+            name='AddTransaction'
+            component={AddTransactionScreen}
+            options={{ presentation: 'modal', title: 'Add Transaction' }}
+          />
+          <Stack.Screen
+            name='ListBeneficiary'
+            component={ListBeneficiaryScreen}
+            options={{ title: 'Transaction' }}
+          />
           <Stack.Screen
             name='AddNewBeneficiary'
             component={AddNewBeneficiaryScreen}
-            options={{ presentation: 'modal' }}
+            options={{
+              presentation: 'modal',
+              title: 'Add Beneficiary',
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>
